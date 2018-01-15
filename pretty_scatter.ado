@@ -1,5 +1,5 @@
 program pretty_scatter
-	version 13
+	version 14
 	syntax varlist(min=2 max=2 numeric) [if] [in] [, unsure(int -888) ///
 		refusal(int -555) other(int -999) na(int -777) name(str) save(str) *]
 

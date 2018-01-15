@@ -1,5 +1,5 @@
 program pretty_wraper
-	version 13
+	version 14
 	syntax anything(name=plot) [if] [in] [, name(str) save(str) *]
 
 	marksample touse
@@ -12,7 +12,7 @@ program pretty_wraper
 
 	local sub = "(N = `obs_count')"
 
-    graph twoway `plot' `if' `in' , scheme(s2personal) ///
+    graph twoway `plot' `if' `in' , scheme(pretty1) ///
         subtitle("`sub'", size(medsmall)) ///
     	name("`name'", replace) `options'
 

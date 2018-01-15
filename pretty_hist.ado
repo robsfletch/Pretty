@@ -3,14 +3,14 @@ program pretty_hist
 	syntax varlist [if] [in] [, save(str) scheme(str) ///
 					  axistitle(str) name(str) angle(passthru)   ///
 					  xlist(str) HORIZONTAL ALT CDF *]
-					  
-	
-	
+
+
+
 	***********************
 	** Observation Count **
 	***********************
 	** Include the number of observations as a subtitle on
-	** the graphs  
+	** the graphs
 	if ("`if'" == "") {
 		qui count if (`varlist' != .)
 	}
@@ -24,7 +24,7 @@ program pretty_hist
 	******************
 	** Set up my personal scheme as the default
 	if "`scheme'" == "" local scheme "s2personal"
-	
+
 	********************
 	** PLOT THE GRAPH **
 	********************
@@ -36,14 +36,14 @@ program pretty_hist
 			subtitle("`sub'") `options'
 	}
 	else {
-		capture su cum_`varlist', meanonly 
-		if _rc == 0 { 
+		capture su cum_`varlist', meanonly
+		if _rc == 0 {
 			drop cum_`varlist'
 		}
-		
+
 		cumul `varlist' `if', gen(cum_`varlist')
 		sort cum_`varlist'
-		
+
 		twoway (hist `varlist' `if', frac yaxis(1)) ///
 			(line cum_`varlist' `varlist' `if', yaxis(2)),  ///
 			scheme("`scheme'") ///
@@ -52,12 +52,12 @@ program pretty_hist
 			ymtick(#10) name("`name'", replace) `nodraw' ///
 			subtitle("`sub'") `options'
 	}
-	
+
 	******************
 	** EXPORT GRAPH **
-	******************		
+	******************
 	if ("`save'" != "") {
 		graph export "`save'", replace fontface(Helvetica-Light)
 	}
- 
+
 end
