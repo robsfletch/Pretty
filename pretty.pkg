@@ -1,0 +1,23 @@
+d 'PRETTY': module to create pretty graphs in stata
+d
+d  pretty is a module that offers a convenient way to create nicely
+d  formatted graphs in stata
+d
+d KW: graphing
+d
+d Requires: Stata version 14
+d
+d Distribution-Date: 20180114
+d
+d Author: Robert Fletcher, Stanford University
+d Support: email rsfletch@stanford.edu
+d
+F pretty_hbar.ado
+F pretty_hist_horiz.ado
+F pretty_hist.ado
+F pretty_hist.sthlp
+F pretty_loghist.ado
+F pretty_loghist.sthlp
+F pretty_logscatter.ado
+F pretty_logscatter.do
+F pretty_scatter.do
