@@ -18,13 +18,13 @@ Use it exactly the same way you would use the `twoway` graphing command in stata
 
 ``` Stata
 sysuse auto
-pretty_parse scatter price mpg if foreign == 0
+pretty scatter price mpg if foreign == 0
 ```
 It should run correctly just like that. There are only two differences in syntax. First, when you specify the `name()` parameter, replace is used by default. Second, if you want to conveniently save files, just use the `save()` option. For example, I can create a graph named *graph1* and save it under the filename *PriceVsMPG.eps* by running
 
 ``` Stata
 sysuse auto
-pretty_parse scatter price mpg if foreign == 0, name("graph1") save("PriceVsMPG.eps")
+pretty scatter price mpg if foreign == 0, name("graph1") save("PriceVsMPG.eps")
 ```
 
 
