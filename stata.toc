@@ -1,4 +1,3 @@
 v 0.0
 d 'Pretty': Easily Create pretty graphs in Stata
-d {browse "http://www.github.com/robsfletch/pretty":Pretty} website
 p pretty
