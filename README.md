@@ -9,14 +9,14 @@ This is a graphing package that intended to simply graphing attractive graphs in
 ## Installation
 To install this package, use the package https://github.com/haghish/github.
 
-``` Stata
+``` stata
 github install robsfletch/Pretty
 ```
 
 ## Use
-Use it exactly the same way you would use the `twoway` graphing command in stata
+Use the `pretty` command exactly the same way you would use the `twoway` graphing command in stata.
 
-``` Stata
+``` stata
 sysuse auto
 pretty scatter price mpg if foreign == 0
 ```

@@ -12,14 +12,12 @@ d
 d Author: Robert Fletcher, Stanford University
 d Support: email rsfletch@stanford.edu
 d
+F auto_log_label.ado
 F pretty_hbar.ado
 F pretty_hist_horiz.ado
 F pretty_hist.ado
 F pretty_hist.sthlp
-F pretty_loghist.ado
 F pretty_loghist.sthlp
-F pretty_logscatter.ado
-F pretty_logscatter.do
 F pretty_scatter.ado
 F pretty_wraper.ado
 F pretty.ado
