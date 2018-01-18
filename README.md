@@ -13,6 +13,8 @@ To install this package, use the package https://github.com/haghish/github.
 github install robsfletch/Pretty
 ```
 
+Note that this package depends on my pretty scheme package, available at https://github.com/robsfletch/PrettyScheme, to provides the colors and style. Pretty scheme can also be easily used on its own if you are interested. In either case, this dependency will automatically be installed when you install Pretty
+
 ## Use
 Use the `pretty` command exactly the same way you would use the `twoway` graphing command in stata.
 
