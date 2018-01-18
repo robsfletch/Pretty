@@ -54,8 +54,7 @@ Another feature of this package is the ability to conveniently handle data on a 
 pretty (hist wage, logbase(1.2))
 ```
 
-![alt text](https://raw.githubusercontent.com/robsfletch/pretty/main/images/LogExample.eps)
-
+![alt text](https://raw.githubusercontent.com/robsfletch/Pretty/master/images/LogExample.eps)
 
 ## Uninstallation
 
