@@ -22,10 +22,39 @@ pretty scatter price mpg if foreign == 0
 ```
 It should run correctly just like that. There are only two differences in syntax. First, when you specify the `name()` parameter, replace is used by default. Second, if you want to conveniently save files, just use the `save()` option. For example, I can create a graph named *graph1* and save it under the filename *PriceVsMPG.eps* by running
 
-``` Stata
+``` stata
 sysuse auto
 pretty scatter price mpg if foreign == 0, name("graph1") save("PriceVsMPG.eps")
 ```
+
+## Coded Values
+This package was designed for use with survey data, and so is very adept at handling coded values (e.g. refusal, unknown, not applicable, etc.). The package currently has default codes set for these, but it is easy to set other values. The default values for now are:
+-   Refusal: -555
+-   Not applicable : - 777
+-   Unsure: -888
+-   Other: -999
+
+For example, suppose there suppose that we have some survey data that contains a wage variable and that some respondents refused to reveal their wages. We can simulate this data
+
+``` stata
+sysuse nlsw88, clear
+replace wage = -555 if inlist(_n, 11, 342, 579, 180, 799, 1400)
+```
+
+Now, when we plot the wage data as a histogram, these values will show up as refusals on the far right of the graph.
+
+``` stata
+pretty hist wage, name("graph1")
+```
+
+## Logarithmic scale
+Another feature of this package is the ability to conveniently handle data on a logarithmic scale -- particularly with regards to histograms. In the last example, we may think that wage is log normal. We can easily this by including the logbase option where we specify the base value.
+
+``` stata
+pretty (hist wage, logbase(1.2))
+```
+
+![alt text](https://raw.githubusercontent.com/robsfletch/pretty/main/images/LogExample.eps)
 
 
 ## Uninstallation
