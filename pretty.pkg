@@ -15,8 +15,8 @@ d
 F auto_log_label.ado
 F pretty_hbar.ado
 F pretty_hist_horiz.ado
-F pretty_hist.ado
-F pretty_hist.sthlp
+F pretty_histogram.ado
+F pretty_histogram.sthlp
 F pretty_loghist.sthlp
 F pretty_scatter.ado
 F pretty_wraper.ado
