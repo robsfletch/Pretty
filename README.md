@@ -46,7 +46,7 @@ Now, when we plot the wage data as a histogram, these values will show up as ref
 ``` stata
 pretty hist wage, name("graph1")
 ```
-![alt text](https://raw.githubusercontent.com/robsfletch/Pretty/master/images/CodesExample.png | width=100)
+![alt text](https://raw.githubusercontent.com/robsfletch/Pretty/master/images/CodesExample.png)
 
 ## Logarithmic scale
 Another feature of this package is the ability to conveniently handle data on a logarithmic scale -- particularly with regards to histograms. In the last example, we may think that wage is log normal. We can easily this by including the logbase option where we specify the base value.
@@ -55,7 +55,7 @@ Another feature of this package is the ability to conveniently handle data on a 
 pretty (hist wage, logbase(1.2))
 ```
 
-![alt text](https://raw.githubusercontent.com/robsfletch/Pretty/master/images/LogExample.png | width=100)
+![alt text](https://raw.githubusercontent.com/robsfletch/Pretty/master/images/LogExample.png)
 
 ## Uninstallation
 
