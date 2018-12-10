@@ -1,4 +1,4 @@
-program pretty_hist, rclass
+program pretty_histogram, rclass
 	version 14
 	syntax varlist(min=4 max=4 numeric) [if] [in] ///
 		[,					///
@@ -6,6 +6,7 @@ program pretty_hist, rclass
 			na(int -777) ///
 			unsure(int -888) ///
 			other(int -999) ///
+			zeros(int 0) ///
 			CDF ///
 			ytitle(str) ///
 			ymtick(str) ///
@@ -17,7 +18,8 @@ program pretty_hist, rclass
 			PERCENT				///
 			RETurn				/// save results in r()
 			display				/// display a note
-		 	logbase(real 1)   ///
+		 	xlogbase(real 1)	///
+			ylogbase(real 1)	///
 			\ *	///
 		]
 
@@ -36,7 +38,7 @@ program pretty_hist, rclass
 	qui replace `passed_in_2' = 0 if inlist(`other', `cs_varlist')
 	qui replace `passed_in_2' = 0 if inlist(`na', `cs_varlist')
 
-	if `logbase' == 1 {
+	if `xlogbase' == 1 {
 		twoway__histogram_gen `varlist' if `passed_in_2', ///
 			bin(`bin') width(`width') start(`start') ///
 			`discrete' `density' `fraction' `frequency' ///
@@ -62,13 +64,13 @@ program pretty_hist, rclass
 		local xlist = strreverse("`xlist'")
 	}
 	else {
+		qui replace `passed_in_2' = 0 if inlist(0, `cs_varlist')
 		auto_log_label `varlist' if `passed_in_2'
 		local xlist1 = r(log_label)
-		qui mylabels `xlist1', myscale(floor(ln(@)/ln(`logbase'))) local(xlist)
+		qui mylabels `xlist1', myscale(floor(ln(@)/ln(`xlogbase'))) local(xlist)
 
-		replace `passed_out' = floor(ln(`varlist')/ln(`logbase'))
+		replace `passed_out' = floor(ln(`varlist')/ln(`xlogbase'))
 		local width = 1
-
 	}
 
 	qui sum `passed_out'
@@ -79,6 +81,7 @@ program pretty_hist, rclass
 		na(`na') ///
 		unsure(`unsure') ///
 		other(`other') ///
+		zeros(`zeros') ///
 		end(`end') ///
 		width(`width') ///
 		xlist(`"`xlist'"')
@@ -92,23 +95,62 @@ program pretty_hist, rclass
 	}
 
  	local Cap_Var = strproper("`varlist'")
-	if ("`cdf'" == "") {
-		local edited_string =  "hist `passed_out' if `passed_in', " + ///
-			"frac ytitle(`ytitle') ymtick(`ymtick') discrete " + ///
-			`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
-	}
-	** Add in the option of superimposing a cdf plot on the histogram plot
-	else {
-		tempvar passthru
-		cumul `passed_out' if `passed_in', gen(`passthru')
-		replace `passed_out2' = `passthru'
-		sort `passed_out2'
 
-		local edited_string =  "hist `passed_out' if `passed_in', " + ///
-			" frac ytitle(`ytitle') yaxis(1) ymtick(`ymtick') discrete " + ///
-			`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options') "' + ///
-			"(line `passed_out2' `passed_out' if `passed_in', " + ///
-			`" yaxis(2) xlabel(`xlist' , angle(45)) ymtick(`ymtick')  `options'"'
+	if (`ylogbase' == 1) {
+		if ("`cdf'" == "") {
+			local edited_string =  "hist `passed_out' if `passed_in', " + ///
+				"`discrete' `density' `fraction' `frequency' ytitle(`ytitle') ymtick(`ymtick') discrete " + ///
+				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
+		}
+		** Add in the option of superimposing a cdf plot on the histogram plot
+		else {
+			tempvar passthru
+			cumul `passed_out' if `passed_in', gen(`passthru')
+			replace `passed_out2' = `passthru'
+			sort `passed_out2'
+
+			local edited_string =  "hist `passed_out' if `passed_in', " + ///
+				" `discrete' `density' `fraction' `frequency' ytitle(`ytitle') yaxis(1) ymtick(`ymtick') discrete " + ///
+				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options') "' + ///
+				"(line `passed_out2' `passed_out' if `passed_in', " + ///
+				`" yaxis(2) xlabel(`xlist' , angle(45)) ymtick(`ymtick')  `options'"'
+		}
+	}
+	else {
+		tempvar passthru1 passthru2
+		twoway__histogram_gen  `passed_out', ///
+			gen(`passthru1' `passthru2') `discrete' `density' `fraction' `frequency'
+
+		replace `passed_out' = `passthru1'
+		replace `passed_out2' = `passthru2'
+
+		if ("`ytitle'" == "") {
+			if ("`fraction'" != "") {
+				local ytitle = "Fraction"
+			}
+			else if ("`frequency'" != "") {
+				local ytitle = "Frequency"
+			}
+			else if ("`percent'" != "") {
+				local ytitle = "Percent"
+			}
+			else {
+				local ytitle = "Density"
+			}
+		}
+
+		local new_width = `width'*.9
+		if ("`cdf'" == "") {
+			local edited_string =  "bar `passed_out' `passed_out2' if `passed_in', " + ///
+				" ytitle(`ytitle') yscale(log) barwidth(`new_width') " + ///
+				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
+		}
+		** Add in the option of superimposing a cdf plot on the histogram plot
+		else {
+			local edited_string =  "bar `passed_out' `passed_out2' if `passed_in', " + ///
+				" ytitle(`ytitle') yscale(log) barwidth(`new_width') " + ///
+				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
+		}
 	}
 
 	return local edited_string = `"`edited_string'"'
@@ -119,37 +161,51 @@ end
 program _add_hist_extras, rclass
     version 14
     syntax varlist , end(real) width(real) xlist(str) ///
-		refusal(int) na(int) unsure(int) other(int)
+		refusal(int) na(int) unsure(int) other(int) zeros(int)
 
 	gettoken bin_var varlist : varlist
     gettoken touse varlist : varlist
     local varlist = strtrim("`varlist'")
 
+	local include_refusal = 0
+	local include_unsure = 0
+	local include_na = 0
+	local include_other = 0
+	local include_zero = 0
+
     if (`refusal' != 0) {
         qui count if `touse' & (`varlist' == `refusal')
         local refusal_count = `r(N)'
-        local include_refusal = ((`refusal' != 0) & (`refusal_count' != 0))
+        local include_refusal = (`refusal_count' != 0)
     }
 
     if (`unsure' != 0) {
         qui count if `touse' & (`varlist' == `unsure')
         local unsure_count = `r(N)'
-        local include_unsure = ((`unsure' != 0) & (`unsure_count' != 0))
+        local include_unsure = (`unsure_count' != 0)
     }
 
     if (`na' != 0) {
         qui count if `touse' & (`varlist' == `na')
         local na_count = `r(N)'
-        local include_na = ((`na' != 0) & (`na_count' != 0))
+        local include_na = (`na_count' != 0)
     }
 
     if (`other' != 0) {
         qui count if `touse' & (`varlist' == `other')
         local other_count = `r(N)'
-        local include_other = ((`other' != 0) & (`other_count' != 0))
+        local include_other = (`other_count' != 0)
     }
 
-    if  `include_unsure' | `include_refusal' | `include_other' | `include_na' {
+	if (`zeros' == 1) {
+		qui count if `touse' & (`varlist' == 0)
+		local zero_count = `r(N)'
+		local include_zero = (`zero_count' != 0)
+	}
+
+    if  `include_unsure' | `include_refusal' | `include_other' | ///
+		`include_na' | `include_zero' {
+
         local add_val = `end' + 3 * `width'
 
         if `include_unsure' {
@@ -174,6 +230,12 @@ program _add_hist_extras, rclass
         if `include_na' {
             replace `bin_var' = `add_val' if `varlist' == `na'
 			local xlist = `"`xlist' `add_val' "NA" "'
+            local add_val = `add_val' + `width'
+        }
+
+		if `include_zero' {
+            replace `bin_var' = `add_val' if `varlist' == 0
+			local xlist = `"`xlist' `add_val' "None" "'
             local add_val = `add_val' + `width'
         }
     }

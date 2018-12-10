@@ -5,6 +5,7 @@ program pretty_scatter, rclass
 
 	gettoken passed_in varlist : varlist
 	gettoken passed_out varlist : varlist
+	gettoken passed_out2 varlist : varlist
 	local varlist = strtrim("`varlist'")
 	local xvar = word("`varlist'",-1)
 	local cs_varlist = subinstr( "`varlist'", " ", ", ", .)

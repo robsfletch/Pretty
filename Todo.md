@@ -8,3 +8,6 @@ Look at this code and see what's up
 
 ## hist_horizontal
 Look at this code and see what's up
+
+## Log Base Zeros
+-   Add ability to have none column when logbase is not one
