@@ -99,7 +99,7 @@ program pretty_histogram, rclass
 	if (`ylogbase' == 1) {
 		if ("`cdf'" == "") {
 			local edited_string =  "hist `passed_out' if `passed_in', " + ///
-				"`discrete' `density' `fraction' `frequency' ytitle(`ytitle') ymtick(`ymtick') discrete " + ///
+				" `density' `fraction' `frequency' ytitle(`ytitle') ymtick(`ymtick') discrete " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
 		}
 		** Add in the option of superimposing a cdf plot on the histogram plot
@@ -110,7 +110,7 @@ program pretty_histogram, rclass
 			sort `passed_out2'
 
 			local edited_string =  "hist `passed_out' if `passed_in', " + ///
-				" `discrete' `density' `fraction' `frequency' ytitle(`ytitle') yaxis(1) ymtick(`ymtick') discrete " + ///
+				" `density' `fraction' `frequency' ytitle(`ytitle') yaxis(1) ymtick(`ymtick') discrete " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options') "' + ///
 				"(line `passed_out2' `passed_out' if `passed_in', " + ///
 				`" yaxis(2) xlabel(`xlist' , angle(45)) ymtick(`ymtick')  `options'"'

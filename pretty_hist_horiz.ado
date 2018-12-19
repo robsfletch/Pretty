@@ -30,7 +30,7 @@ program pretty_hist_horiz
 	** SCHEME SETUP **
 	******************
 	** Set up my personal scheme as the default
-	if "`scheme'" == "" local scheme "s2personal"
+	if "`scheme'" == "" local scheme "pretty1"
 
 
 	*******************************************
