@@ -26,7 +26,12 @@ program pretty_histogram, rclass
 	gettoken passed_in varlist : varlist
 	gettoken passed_out varlist : varlist
 	gettoken passed_out2 varlist : varlist
+
+	// Get the name of the variable to histogram
 	local varlist = strtrim("`varlist'")
+
+	// Not important here, but in problems with multiple variables,
+	// get a comma seperated list of them for processing
 	local cs_varlist = subinstr( "`varlist'", " ", ", ", .)
 
 	marksample touse
@@ -91,9 +96,9 @@ program pretty_histogram, rclass
 		xlist(`"`xlist'"')
 
 	local xlist = r(xlist)
-	***************************************************************************
-	** SETUP PLOTTING STRING
-	***************************************************************************
+********************************************************************************
+** SETUP PLOTTING STRING
+********************************************************************************
 	if "`ymtick'" == "" {
 		local ymtick = "#10"
 	}
