@@ -37,6 +37,8 @@ program pretty_histogram, rclass
 	qui replace `passed_in_2' = 0 if inlist(`refusal', `cs_varlist')
 	qui replace `passed_in_2' = 0 if inlist(`other', `cs_varlist')
 	qui replace `passed_in_2' = 0 if inlist(`na', `cs_varlist')
+	count if `passed_in' != `passed_in_2'
+	local extras = r(N)
 
 	if `xlogbase' == 1 {
 		twoway__histogram_gen `varlist' if `passed_in_2', ///
@@ -46,22 +48,24 @@ program pretty_histogram, rclass
 
 		local start = r(start)
 	    local width = r(width)
+		local p_max = r(max)
+		// Assign the bin number to passed_out
 		tempvar dif
 	    gen `dif' = `varlist' - `start' if `passed_in'
 	    replace `passed_out' = int(`dif'/`width') + 1 if `passed_in'
-
-		qui sum `varlist'
-	    local p_max = r(max)
+		// If Something is right on the top edge of the highest bin,
+		// put in in the highest bin
 	    replace `passed_out' = `passed_out' - 1 if `varlist' == `p_max' & `passed_in'
+		replace `passed_out' = (`passed_out' - 1) * `width' + `start'
 
-		replace `passed_out' = `passed_out' * `width' + `start'
-
-		regaxis `varlist' if `passed_in_2'
+		regaxis `varlist' if `passed_in_2', cycle(`width') maxticks(10)
 		local xlist = r(ticks)
-		gettoken first xlist : xlist
-		local xlist = strreverse("`xlist'")
-		gettoken last xlist : xlist
-		local xlist = strreverse("`xlist'")
+		* gettoken first xlist : xlist
+		if `extras' != 0 {
+			local xlist = strreverse("`xlist'")
+			gettoken last xlist : xlist
+			local xlist = strreverse("`xlist'")
+		}
 	}
 	else {
 		qui replace `passed_in_2' = 0 if inlist(0, `cs_varlist')
