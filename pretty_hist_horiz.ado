@@ -2,7 +2,7 @@ program pretty_hist_horiz
 	version 13
 	syntax varlist [if] [in] [, save(str) scheme(str) ///
 					  axistitle(str) name(str) angle(passthru)   ///
-					  xlist(str) SORT *]
+					  xlist(str) SORT OBSCOUNT *]
 
 	***********************
 	** Label Points List **
@@ -23,7 +23,10 @@ program pretty_hist_horiz
 	else {
 		qui count `if' & (`varlist' != .)
 	}
-	local sub = "(N = `r(N)')"
+	if ("`obscount'" != "") {
+		local sub = `"subtitle("(N = `r(N)')")"'
+	}
+
 
 	******************
 	** SCHEME SETUP **
@@ -106,8 +109,8 @@ program pretty_hist_horiz
 	yscale(reverse) xlabel(, grid) ///
 	ylabel(`new_label', angle(0) nogrid) ///
 	ytitle("`axistitle'") xtitle("") ///
-	xmtick(#10) name("`name'", replace) `nodraw' ///
-	subtitle("`sub'") `options'
+	name("`name'", replace) `nodraw' ///
+	`sub' `options'
 
 *******************************************************************************
 ** EXPORT GRAPH

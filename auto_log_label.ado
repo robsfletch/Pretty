@@ -6,14 +6,14 @@ program auto_log_label, rclass
     marksample touse
 
     qui niceloglabels `varlist' if `touse', local(log_label) style(1)
-    local list_count : word count "`log_label'"
+    local list_count : word count `log_label'
 
-    if (`list_count' <= 6) {
+    if (`list_count' <= 5) {
         qui niceloglabels `varlist' if `touse', local(log_label) style(13)
     }
     local xlist = "`log_label'"
 
-    local list_count : word count "`log_label'"
+    local list_count : word count `log_label'
 
     if (`list_count' <= 3) {
         qui niceloglabels `varlist' if `touse', local(log_label) style(125)
