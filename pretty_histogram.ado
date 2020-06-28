@@ -89,7 +89,7 @@ program pretty_histogram, rclass
 	if (`ylogbase' == 1) {
 		if ("`cdf'" == "") {
 			local edited_string =  "hist `new_yvar' if `use_flag', " + ///
-				" `density' `fraction' `frequency' ytitle(`ytitle') ymtick(`ymtick') discrete " + ///
+				" `density' `fraction' `frequency' `ytitle' ymtick(`ymtick') discrete " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
 		}
 		** Add in the option of superimposing a cdf plot on the histogram plot
@@ -100,7 +100,7 @@ program pretty_histogram, rclass
 			sort `new_xvar'
 
 			local edited_string =  "hist `new_yvar' if `use_flag', " + ///
-				" `density' `fraction' `frequency' ytitle(`ytitle') yaxis(1) ymtick(`ymtick') discrete " + ///
+				" `density' `fraction' `frequency' `ytitle' yaxis(1) ymtick(`ymtick') discrete " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options') "' + ///
 				"(line `new_xvar' `new_yvar' if `use_flag', " + ///
 				`" yaxis(2) xlabel(`xlist' , angle(45)) ymtick(`ymtick')  `options'"'
@@ -116,29 +116,29 @@ program pretty_histogram, rclass
 
 		if ("`ytitle'" == "") {
 			if ("`fraction'" != "") {
-				local ytitle = "Fraction"
+				local ytitle = `"ytitle("Fraction")"'
 			}
 			else if ("`frequency'" != "") {
-				local ytitle = "Frequency"
+				local ytitle = `"ytitle("Frequency")"'
 			}
 			else if ("`percent'" != "") {
-				local ytitle = "Percent"
+				local ytitle = `"ytitle("Percent")"'
 			}
 			else {
-				local ytitle = "Density"
+				local ytitle = `"ytitle("Density")"'
 			}
 		}
 
 		local new_width = `width'*.9
 		if ("`cdf'" == "") {
 			local edited_string =  "bar `new_yvar' `new_xvar' if `use_flag', " + ///
-				" ytitle(`ytitle') yscale(log) barwidth(`new_width') " + ///
+				" `ytitle' yscale(log) barwidth(`new_width') " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
 		}
 		** Add in the option of superimposing a cdf plot on the histogram plot
 		else {
 			local edited_string =  "bar `new_yvar' `new_xvar' if `use_flag', " + ///
-				" ytitle(`ytitle') yscale(log) barwidth(`new_width') " + ///
+				" `ytitle' yscale(log) barwidth(`new_width') " + ///
 				`" xlabel(`xlist' , angle(45)) xtitle("`Cap_Var'") `options'"'
 		}
 	}
