@@ -66,7 +66,7 @@ program pretty_hbar
 	** EXPORT GRAPH **
 	******************
 	if ("`save'" != "") {
-		graph export "`save'", replace fontface(Helvetica-Light)
+		graph export "`save'", replace
 	}
 
 	drop Probs*

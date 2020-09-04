@@ -117,7 +117,7 @@ program pretty_hist_horiz
 *******************************************************************************
 
 	if ("`save'" != "") {
-		graph export "`save'", replace fontface(Helvetica-Light)
+		graph export "`save'", replace
 	}
 
 end

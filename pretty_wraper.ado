@@ -29,6 +29,6 @@ program pretty_wraper
 	** EXPORT GRAPH **
 	******************
 	if ("`save'" != "") {
-		graph export "`save'", replace fontface(Helvetica-Light)
+		graph export "`save'", replace
 	}
 end
